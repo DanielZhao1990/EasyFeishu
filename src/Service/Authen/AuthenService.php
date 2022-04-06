@@ -25,11 +25,27 @@ class AuthenService extends BaseHttpService
             ]);
     }
 
+    /**
+     * @param string $code
+     * @return array
+     * @throws \EasyFeishu\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \EasyFeishu\Kernel\Exceptions\FeishuErrorException
+     */
     public function getUserInfo(string $code): array
     {
         $ret = $this->httpPostJson('open-apis/authen/v1/access_token', [
             'grant_type' => 'authorization_code',
             'code' => $code,
+        ]);
+        return $ret['data'] ?? [];
+    }
+
+    public function refreshAccessToken($refreshToken)
+    {
+        $ret = $this->httpPostJson('/open-apis/authen/v1/refresh_access_token', [
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $refreshToken,
         ]);
         return $ret['data'] ?? [];
     }

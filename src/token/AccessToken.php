@@ -53,6 +53,7 @@ abstract class AccessToken implements AccessTokenInterface
     protected $token;
 
     /**
+     * $token 数组中，token的字段名称
      * @var string
      */
     protected $tokenKey = 'access_token';

@@ -11,6 +11,9 @@ namespace EasyFeishu;
 use EasyFeishu\Kernel\ServiceContainer;
 use EasyFeishu\Service\Authen\AuthenService;
 use EasyFeishu\Service\Authen\AuthenServiceProvider;
+use EasyFeishu\Service\Calendar\CalendarEventService;
+use EasyFeishu\Service\Calendar\CalendarService;
+use EasyFeishu\Service\Calendar\CalendarProvider;
 use EasyFeishu\Service\Contact\Contact;
 use EasyFeishu\Service\Contact\ContactProvider;
 use EasyFeishu\Service\Message\Message;
@@ -18,13 +21,15 @@ use EasyFeishu\Service\Message\MessageBuilder;
 use EasyFeishu\Service\Message\MessageProvider;
 use EasyFeishu\token\AccessTokenProvider;
 use EasyFeishu\token\AppAccessToken;
-use feishu\TenantAccessToken;
+use EasyFeishu\token\TenantAccessToken;
 
 
 /**
  * @property AuthenService $authen
  * @property Contact $contact
  * @property Message $message
+ * @property CalendarService $calendar
+ * @property CalendarEventService $calendar_event
  * @property MessageBuilder $messageBuilder
  * @property TenantAccessToken $tenant_access_token
  * @property AppAccessToken $app_access_token
@@ -38,6 +43,7 @@ class FeiShuApp extends ServiceContainer
         AccessTokenProvider::class,
         ContactProvider::class,
         MessageProvider::class,
+        CalendarProvider::class,
     ];
 
 

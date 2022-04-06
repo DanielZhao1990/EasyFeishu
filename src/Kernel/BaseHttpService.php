@@ -9,8 +9,10 @@
 namespace EasyFeishu\Kernel;
 
 
+use EasyFeishu\Kernel\Exceptions\FeishuErrorException;
 use EasyFeishu\Kernel\Traits\HasHttpRequests;
 use EasyFeishu\token\AccessTokenInterface;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
@@ -20,7 +22,9 @@ use Psr\Log\LogLevel;
 class BaseHttpService
 {
 
-    use HasHttpRequests { request as performRequest; }
+    use HasHttpRequests {
+        request as performRequest;
+    }
 
     /**
      * @var \EasyFeishu\Kernel\ServiceContainer
@@ -48,6 +52,7 @@ class BaseHttpService
         $this->accessToken = $accessToken ?? $this->app['access_token'];
     }
 
+
     /**
      * GET request.
      *
@@ -55,6 +60,7 @@ class BaseHttpService
      *
      * @throws \EasyFeishu\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws FeishuErrorException
      */
     public function httpGet(string $url, array $query = [])
     {
@@ -81,6 +87,7 @@ class BaseHttpService
      *
      * @throws \EasyFeishu\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws FeishuErrorException
      */
     public function httpPostJson(string $url, array $data = [], array $query = [])
     {
@@ -133,20 +140,30 @@ class BaseHttpService
      *
      * @return \Psr\Http\Message\ResponseInterface|\EasyFeishu\Kernel\Support\Collection|array|object|string
      *
-     * @throws \EasyFeishu\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws FeishuErrorException
      */
     public function request(string $url, string $method = 'GET', array $options = [], $returnRaw = false)
     {
         if (empty($this->middlewares)) {
             $this->registerHttpMiddlewares();
         }
-
-        $response = $this->performRequest($url, $method, $options);
-
-        $this->app->events->dispatch(new Events\HttpResponseCreated($response));
-
-        return $returnRaw ? $response : $this->castResponseToType($response, $this->app->config->get('response_type'));
+        try {
+            $response = $this->performRequest($url, $method, $options);
+            $this->app->events->dispatch(new Events\HttpResponseCreated($response));
+            $ret = $returnRaw ? $response : $this->castResponseToType($response, $this->app->config->get('response_type'));
+            if (is_array($ret) && $ret["code"] !== 0) {
+                throw new FeishuErrorException($ret['msg'], $ret['code']);
+            }
+            return $ret;
+        } catch (ClientException $e) {
+            $resp = $this->castResponseToType($e->getResponse());
+            if (isset($resp['msg'])) {
+                throw new FeishuErrorException($resp['msg'], $resp['code']);
+            } else {
+                throw  $e;
+            }
+        }
     }
 
     /**

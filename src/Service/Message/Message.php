@@ -28,38 +28,6 @@ class Message extends \EasyFeishu\Kernel\BaseHttpService
         return $ret['data'] ?? [];
     }
 
-    /**
-     * @deprecated
-     * @see https://open.feishu.cn/document/ukTMukTMukTM/uUjNz4SN2MjL1YzM
-     * @param $data = [
-     *     'open_id' => 'ou_5ad573a6411d72b8305fda3a9c15c70e',
-     *     'chat_id' => 'oc_5ad11d72b830411d72b836c20',
-     *     'user_id' => '92e39a99',
-     *     'email' => 'fanlv@gmail.com',
-     * ]
-     */
-    public function sendText(array $data, string $text)
-    {
-        $data['msg_type'] = 'text';
-        $data['content']['text'] = $text;
-
-        $type = null;
-        foreach (['chat_id', 'open_id', 'user_id', 'email'] as $key) {
-            if (isset($data[$key])) {
-                $type = $key;
-                $data['receive_id'] = $data[$key];
-                unset($data[$key]);
-                break;
-            }
-        }
-
-        if (!isset($type)) {
-            throw new InvalidArgumentException("Couldn't guess the type for message request.");
-        }
-
-        return $this->send($data, $type);
-    }
-
     public static function getName(): string
     {
         return 'message';

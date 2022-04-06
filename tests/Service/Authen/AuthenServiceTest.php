@@ -7,7 +7,9 @@
  */
 
 namespace EasyFeishu\Tests\Service\Authen;
+
 use EasyFeishu\Tests\BaseFeishuTest;
+
 class AuthenServiceTest extends BaseFeishuTest
 {
 
@@ -24,9 +26,9 @@ class AuthenServiceTest extends BaseFeishuTest
     public function testGetUserInfo()
     {
         $app = $this->getFeishuApp();
-        $userinfo = $app->authen->getUserInfo("Xn6nYep7wtHBhDp7P0aMkf");
+        $userinfo = $app->authen->getUserInfo("q1E2XNiQYqBb0kcRsmgDFa");
         print_r($userinfo);
-        file_put_contents($this->userinfo_file, json_encode($userinfo, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        $this->setUser($userinfo);
     }
 
 

@@ -7,6 +7,7 @@
  */
 
 namespace EasyFeishu\Tests\Service\Contact;
+
 use EasyFeishu\Tests\BaseFeishuTest;
 
 class ContactTest extends BaseFeishuTest
@@ -44,8 +45,12 @@ class ContactTest extends BaseFeishuTest
 
     public function testUser()
     {
+        $user = $this->getUser();
         $app = $this->getFeishuApp();
-        $userinfo = $app->contact->user("ou_fa9bdf124bcf6119726fb90b046e925e");
-        print_r($userinfo);
+        $userinfo = $app->contact->user($user["open_id"]);
+        print_r($user);
+        $this->assertArrayHasKey("user", $userinfo);
+        $userinfo = $app->contact->user($user["user_id"], "user_id");
+        $this->assertArrayHasKey("user", $userinfo);
     }
 }

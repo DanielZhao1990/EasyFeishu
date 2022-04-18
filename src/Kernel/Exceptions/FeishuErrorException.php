@@ -11,5 +11,9 @@ namespace EasyFeishu\Kernel\Exceptions;
 
 class FeishuErrorException extends Exception
 {
+    /**
+     * generate_access_token_fail
+     */
+    const EXCEPTION_CODE_EXPIRED = 20007;
 
 }

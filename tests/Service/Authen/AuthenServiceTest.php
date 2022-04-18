@@ -26,7 +26,7 @@ class AuthenServiceTest extends BaseFeishuTest
     public function testGetUserInfo()
     {
         $app = $this->getFeishuApp();
-        $userinfo = $app->authen->getUserInfo("q1E2XNiQYqBb0kcRsmgDFa");
+        $userinfo = $app->authen->getUserInfo("tR1hbp2mxTASLWQAXH6qfa");
         print_r($userinfo);
         $this->setUser($userinfo);
     }

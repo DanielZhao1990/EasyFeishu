@@ -12,8 +12,10 @@ use EasyFeishu\Kernel\ServiceContainer;
 use EasyFeishu\Service\Authen\AuthenService;
 use EasyFeishu\Service\Authen\AuthenServiceProvider;
 use EasyFeishu\Service\Calendar\CalendarEventService;
-use EasyFeishu\Service\Calendar\CalendarService;
 use EasyFeishu\Service\Calendar\CalendarProvider;
+use EasyFeishu\Service\Calendar\CalendarService;
+use EasyFeishu\Service\Cloud\Cloud;
+use EasyFeishu\Service\Cloud\CloudProvider;
 use EasyFeishu\Service\Contact\Contact;
 use EasyFeishu\Service\Contact\ContactProvider;
 use EasyFeishu\Service\Message\Message;
@@ -28,6 +30,7 @@ use EasyFeishu\token\TenantAccessToken;
  * @property AuthenService $authen
  * @property Contact $contact
  * @property Message $message
+ * @property Cloud $cloud
  * @property CalendarService $calendar
  * @property CalendarEventService $calendar_event
  * @property MessageBuilder $messageBuilder
@@ -44,6 +47,7 @@ class FeiShuApp extends ServiceContainer
         ContactProvider::class,
         MessageProvider::class,
         CalendarProvider::class,
+        CloudProvider::class,
     ];
 
 

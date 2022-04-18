@@ -33,6 +33,8 @@ class UserAccessToken extends AccessToken
      */
     protected $token;
 
+    protected $refresh_callback;
+
     /**
      * @throws \EasyFeishu\Kernel\Exceptions\HttpException
      * @throws \Psr\SimpleCache\InvalidArgumentException
@@ -56,8 +58,20 @@ class UserAccessToken extends AccessToken
         if (isset($token['refresh_callback'])) {
             $token['refresh_callback']($token);
         }
+        if (isset($this->refresh_callback)) {
+            call_user_func($this->refresh_callback, $token);
+        }
         $this->token = $token;
         return $token;
+    }
+
+    /**
+     * 设置刷新token后的回调
+     * @param mixed $refresh_callback
+     */
+    public function setRefreshCallback($refresh_callback)
+    {
+        $this->refresh_callback = $refresh_callback;
     }
 
     /**

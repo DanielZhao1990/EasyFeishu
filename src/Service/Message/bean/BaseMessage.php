@@ -12,10 +12,20 @@ namespace EasyFeishu\Service\Message\bean;
 abstract class BaseMessage
 {
 
+    protected $data;
 
+    /**
+     * 在构建消息时被调用，将消息数据打包为json
+     * @return string
+     */
     public function build()
     {
-        return json_encode($this, JSON_UNESCAPED_UNICODE);
+        return $this->encode($this->data);
+    }
+
+    protected function encode($data)
+    {
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
     /**

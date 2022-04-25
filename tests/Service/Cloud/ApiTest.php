@@ -40,14 +40,14 @@ class ApiTest extends BaseFeishuTest
             "https://muomkkun0c.feishu.cn/docs/doccnknToJ1J9176AbyEtWKxOSf#",
             "https://muomkkun0c.feishu.cn/docs/doccnT5Lla6fnZnK2HgrKIM6rub",
             "https://muomkkun0c.feishu.cn/file/boxcn35UeLe1ye0VmBDLQtdI3xh",
-//            "https://muomkkun0c.feishu.cn/mindnotes/bmncnN9b9Wq4jmHmyzMJs86fiLe",
+            "https://muomkkun0c.feishu.cn/mindnotes/bmncnN9b9Wq4jmHmyzMJs86fiLe",
             "https://muomkkun0c.feishu.cn/docs/doccn5BZC1xNeqplPTAJVhqvZ1e",
             "https://muomkkun0c.feishu.cn/docs/doccnMlESmdkU7OOquYAuts8FGf",
             "https://muomkkun0c.feishu.cn/mindnotes/bmncnqVZLjsiWYWr93XlSYwoxRb",
             "https://muomkkun0c.feishu.cn/file/boxcnVGd4eqPD12X1mCcTTj5Vkb",
             "https://muomkkun0c.feishu.cn/base/bascnzsQJZ84VSyA4X66pvF2l3b",
             "https://muomkkun0c.feishu.cn/sheets/shtcn6SFXJFNnt7merO6ghAUM4e",
-//            "https://muomkkun0c.feishu.cn/base/bascnzsQJZ84VSyA4X66pvF2l3b?table=tbl3INEw6rEiOGZn&view=vewp7nmiS4",
+            "https://muomkkun0c.feishu.cn/base/bascnzsQJZ84VSyA4X66pvF2l3b?table=tbl3INEw6rEiOGZn&view=vewp7nmiS4",
         ];
         $app = $this->getFeishuApp();
         $docs = [];
@@ -63,6 +63,9 @@ class ApiTest extends BaseFeishuTest
         $res = $app->cloud->api->setAccessToken($userToken)->meta(
             $docs
         );
+//        $res = $app->cloud->api->meta(
+//            $docs
+//        );
         print_r($res);
     }
 

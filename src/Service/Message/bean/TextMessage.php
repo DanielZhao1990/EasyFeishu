@@ -16,7 +16,7 @@ namespace EasyFeishu\Service\Message\bean;
 class TextMessage extends BaseMessage
 {
 
-    public $text = "";
+    public $data = "";
 
     /**
      * 消息类型
@@ -29,7 +29,7 @@ class TextMessage extends BaseMessage
 
     public function appendText(string $text): TextMessage
     {
-        $this->text .= $text;
+        $this->data .= $text;
         return $this;
     }
 
@@ -39,7 +39,7 @@ class TextMessage extends BaseMessage
      */
     public function appendAtUser(string $user_id, string $user_name)
     {
-        $this->text .= "<at user_id=\"$user_id\">$user_name</at>";
+        $this->data .= "<at user_id=\"$user_id\">$user_name</at>";
         return $this;
     }
 
@@ -48,7 +48,7 @@ class TextMessage extends BaseMessage
      */
     public function appendAtAll()
     {
-        $this->text .= "<at user_id=\"all\">所有人</at>";
+        $this->data .= "<at user_id=\"all\">所有人</at>";
         return $this;
     }
 

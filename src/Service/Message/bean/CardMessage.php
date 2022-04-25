@@ -8,6 +8,10 @@
 
 namespace EasyFeishu\Service\Message\bean;
 
+use EasyFeishu\Service\Message\bean\Element\ActionElement;
+use EasyFeishu\Service\Message\bean\Element\BaseElement;
+use EasyFeishu\Service\Message\bean\Element\DivElement;
+
 /**
  * @see https://open.feishu.cn/document/ukTMukTMukTM/uEjNwUjLxYDM14SM2ATN
  * @package EasyFeishu\Service\Message
@@ -15,24 +19,25 @@ namespace EasyFeishu\Service\Message\bean;
 class CardMessage extends BaseMessage
 {
 
-
-    public $header = [
-        "title" => [
-            "tag" => "plain_text",
-            "content" => "this is header"
-        ]
-    ];
-    public $elements = [
-
-
-    ];
-
-    private $action = [
-        "tag" => "action",
-        "actions" => [
+    protected $data = [
+        "header" => [
+            "template" => "blue",
+            "title" => [
+                "tag" => "plain_text",
+                "content" => "this is header"
+            ]
+        ],
+        "elements" => [
 
         ]
     ];
+
+
+    /**
+     * @var array
+     */
+    protected $elements = [];
+
 
     /**
      * 消息类型
@@ -44,49 +49,94 @@ class CardMessage extends BaseMessage
     }
 
 
-    public function setHeader($content, $tag = null): CardMessage
+    /**
+     * @param $content
+     * @param $template string blue|
+     * @param null $tag
+     * @return CardMessage
+     */
+    public function setHeader($content,$template="blue", $tag = null): CardMessage
     {
         if ($tag) {
-            $this->header["title"]["tag"] = $tag;
+            $this->data["header"]["title"]["tag"] = $tag;
         }
         if ($content) {
-            $this->header["title"]["content"] = $content;
+            $this->data["header"]["title"]["content"] = $content;
         }
         return $this;
     }
 
-    public function addElementText($content): CardMessage
+
+    /**
+     * @return ActionElement
+     */
+    public function buildAction()
     {
-        $text = [
-            "tag" => "div",
-            "text" => [
-                "tag" => "plain_text",
-                "content" => $content
-            ]
-        ];
-        $this->elements[] = $text;
-        return $this;
+        $element = new ActionElement();
+        $this->addElement($element);
+        return $element;
     }
 
-    public function addActionButton($text, $url = ""): CardMessage
+    /**
+     * @return DivElement
+     */
+    public function buildDiv()
     {
-        $this->action["actions"][] = [
-            "tag" => "button",
-            "text" => [
-                "content" => $text,
-                "tag" => "plain_text"
-            ],
-            "url" => $url
-        ];
-        return $this;
+        $element = new DivElement();
+        $this->addElement($element);
+        return $element;
     }
 
     public function build(): string
     {
-        if ($this->action["actions"]) {
-            $this->elements[] = $this->action;
+        $this->data["elements"]=[];
+        foreach ($this->elements as $element) {
+            $this->data["elements"][] = $element->build();
         }
         return parent::build();
+    }
+
+    public function buildHR()
+    {
+        $element = new BaseElement("hr");
+        return $this->addElement($element);
+    }
+
+    /**
+     * 添加一个element到节点
+     * @param $element
+     * @return $this
+     */
+    private function addElement($element): CardMessage
+    {
+        $this->elements[] = $element;
+        return $this;
+    }
+
+
+    /**
+     * @deprecated
+     * @param $content
+     * @return CardMessage
+     */
+    public function addElementText($content): CardMessage
+    {
+        $element = new DivElement();
+        $element->addText($content);
+        return $this->addElement($element);
+    }
+
+    /**
+     * @deprecated
+     * @param $text
+     * @param string $url
+     * @return CardMessage
+     */
+    public function addActionButton($text, $url = ""): CardMessage
+    {
+        $element = new ActionElement();
+        $element->addButton($text, $url);
+        return $this->addElement($element);
     }
 
 }

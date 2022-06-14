@@ -36,6 +36,7 @@ class Api extends BaseHttpService
         }
         $typeMap = [
             "docs" => "doc",
+            "docx" => "docx",
             "sheets" => "sheet",
             "mindnotes" => "mindnote",
             "base" => "bitable",
@@ -43,7 +44,7 @@ class Api extends BaseHttpService
         ];
         $type = $paths[1];
         $token = $paths[2];
-        if (!$typeMap[$type]) {
+        if (!isset($typeMap[$type])) {
             throw new InvalidArgumentException("错误的文档格式:$type");
         }
         return [
